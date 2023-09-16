@@ -6,9 +6,17 @@ from rest_framework import status
 from django.urls import path
 from random import choice
 from .models import HangmanApi
-from .serializers import HangmanApiSerializer
+from .serializers import HangmanApiSerializer, GuessSerializer
 
 # API Views using DRF
+
+class AllGamesView(generics.ListAPIView):
+    serializer_class = HangmanApiSerializer
+
+    def get_queryset(self):
+        # Retrieve games with different states
+        queryset = HangmanApi.objects.all()
+        return queryset
 
 class InProgressGamesCountView(APIView):
     def get(self, request):
@@ -53,29 +61,39 @@ class GuessView(generics.UpdateAPIView):
 
     def update(self, request, *args, **kwargs):
         game = self.get_object()
-        guessed_letter = request.data.get('guessed_letter')
+        
+        # Use the GuessSerializer for validating guessed_letter
+        serializer = GuessSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        guessed_letter = serializer.validated_data['guessed_letter'].lower()  # Convert to lowercase
+
+        # Convert the word to guess to lowercase for case-insensitive comparison
+        word_to_guess_lower = game.word_to_guess.lower()
 
         # Check if the game is still in progress
         if game.game_state == 'InProgress':
-            # Check if the guessed letter is in the word to guess
-            if guessed_letter in game.word_to_guess:
+            # Check if the guessed letter is in the word to guess (case-insensitive)
+            if guessed_letter in word_to_guess_lower:
                 # Update the current word state with the correct guess
                 new_word_state = ''
                 for i in range(len(game.word_to_guess)):
-                    if game.word_to_guess[i] == guessed_letter:
-                        new_word_state += guessed_letter
+                    if word_to_guess_lower[i] == guessed_letter:
+                        new_word_state += game.word_to_guess[i]  # Use the original casing
                     else:
                         new_word_state += game.current_word_state[i]
                 game.current_word_state = new_word_state
                 # Check for game over condition (won)
                 if game.current_word_state == game.word_to_guess:
                     game.game_state = 'Won'
+                correct_guess = True  # Guess was correct
             else:
                 # Increment the count of incorrect guesses
                 game.incorrect_guesses += 1
                 # Check for game over condition (lost)
                 if game.incorrect_guesses >= game.max_incorrect_guesses:
                     game.game_state = 'Lost'
+                    game.incorrect_guesses = game.max_incorrect_guesses  # Set to max allowed
+                correct_guess = False  # Guess was incorrect
 
             # Save the updated game state
             game.save()
@@ -83,11 +101,12 @@ class GuessView(generics.UpdateAPIView):
             # Create a response dictionary
             response_data = {
                 "game_state": game.game_state,
+                "correct_guess": correct_guess,  # Include correct_guess field
+                "current_word_state": game.current_word_state,  # Always include current_word_state
+                "incorrect_guesses": game.incorrect_guesses,  # Include incorrect_guesses field
             }
 
             if game.game_state == 'InProgress':
-                response_data["current_word_state"] = game.current_word_state
-                response_data["incorrect_guesses"] = game.incorrect_guesses
                 response_data["max_incorrect_guesses"] = game.max_incorrect_guesses
 
             return Response(response_data)

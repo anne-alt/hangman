@@ -1,4 +1,5 @@
 from django.db import models
+import math  # Import the math module
 
 class HangmanApi(models.Model):
     WORDS = ["Hangman", "Python", "Audacix", "Bottle", "Pen"]
@@ -10,5 +11,5 @@ class HangmanApi(models.Model):
 
     def save(self, *args, **kwargs):
         # Calculate max_incorrect_guesses based on the length of word_to_guess
-        self.max_incorrect_guesses = (len(self.word_to_guess) // 2)
+        self.max_incorrect_guesses = math.ceil(len(self.word_to_guess) / 2)
         super().save(*args, **kwargs)
