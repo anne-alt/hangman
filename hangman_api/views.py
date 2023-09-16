@@ -1,4 +1,5 @@
 from django.shortcuts import render
+import math
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics
@@ -34,12 +35,15 @@ class NewGameView(generics.CreateAPIView):
         # Choose a random word from the list of words
         word_to_guess = choice(HangmanApi.WORDS)
 
+        max_incorrect_guesses = math.ceil(len(word_to_guess) / 2)
+
+
         # Initialize the game state
         game = HangmanApi(
             word_to_guess=word_to_guess,
             current_word_state='_' * len(word_to_guess),
             incorrect_guesses=0,
-            max_incorrect_guesses=len(word_to_guess) // 2,  # Half the length of the word
+            max_incorrect_guesses=max_incorrect_guesses,            
             game_state='InProgress'
         )
 

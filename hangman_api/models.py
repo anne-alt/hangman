@@ -1,5 +1,5 @@
 from django.db import models
-import math  # Import the math module
+import math 
 
 class HangmanApi(models.Model):
     WORDS = ["Hangman", "Python", "Audacix", "Bottle", "Pen"]

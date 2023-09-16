@@ -2,7 +2,7 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework import status
 from .models import HangmanApi
-import math  # Import the math module
+import math  
 
 
 class NewGameAPITest(TestCase):
@@ -83,7 +83,7 @@ class GuessAPITest(TestCase):
         self.assertEqual(data['game_state'], 'Lost')
         self.assertEqual(data['correct_guess'], False)
         self.assertEqual(data['current_word_state'], '___')
-        self.assertEqual(data['incorrect_guesses'], 2)  # Max allowed incorrect guesses reached
+        self.assertEqual(data['incorrect_guesses'], 2)  
 
     def test_make_guess_invalid_id(self):
         invalid_id = 999  # Non-existent game ID
