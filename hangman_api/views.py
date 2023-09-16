@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics
 from rest_framework import status
@@ -8,6 +9,15 @@ from .models import HangmanApi
 from .serializers import HangmanApiSerializer
 
 # API Views using DRF
+
+class InProgressGamesCountView(APIView):
+    def get(self, request):
+        # Count the number of games in progress
+        games_in_progress = HangmanApi.objects.filter(game_state='InProgress').count()
+
+        return Response({"games_in_progress": games_in_progress})
+
+
 class NewGameView(generics.CreateAPIView):
     queryset = HangmanApi.objects.all()
     serializer_class = HangmanApiSerializer
