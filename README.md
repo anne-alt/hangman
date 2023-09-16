@@ -31,10 +31,10 @@ Follow these steps to set up the Hangman API on your local machine:
     source env/bin/activate  # On Windows, use: env\Scripts\activate
     ```
 
-3. **Dependencies**:
+3. **Install Dependencies**:
 
-    - Django (version 3.2.5)
-    - djangorestframework (version 3.12.4)
+    - pip install django
+    - pip install djangorestframework
 
 4. **Apply Migrations**:
 
