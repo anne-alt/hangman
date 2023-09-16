@@ -28,14 +28,13 @@ Follow these steps to set up the Hangman API on your local machine:
 
     ```bash
     python -m venv venv
-    source venv/bin/activate  # On Windows, use: venv\Scripts\activate
+    source env/bin/activate  # On Windows, use: env\Scripts\activate
     ```
 
-3. **Install Dependencies**:
+3. **Dependencies**:
 
-    ```bash
-    pip install -r requirements.txt
-    ```
+    - Django (version 3.2.5)
+    - djangorestframework (version 3.12.4)
 
 4. **Apply Migrations**:
 
