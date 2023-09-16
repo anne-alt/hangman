@@ -33,8 +33,10 @@ Follow these steps to set up the Hangman API on your local machine:
 
 3. **Install Dependencies**:
 
-    - pip install django
-    - pip install djangorestframework
+    ```bash
+    pip install django
+    pip install djangorestframework
+    ```
 
 4. **Apply Migrations**:
 
