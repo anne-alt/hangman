@@ -21,13 +21,13 @@ Follow these steps to set up the Hangman API on your local machine:
 
     ```bash
     git clone <repository_url>
-    cd hangman-api
+    cd hangman
     ```
 
 2. **Create a Virtual Environment** (Optional but recommended):
 
     ```bash
-    python -m venv venv
+    python3 -m venv venv
     source env/bin/activate  # On Windows, use: env\Scripts\activate
     ```
 
@@ -56,7 +56,7 @@ The API should now be accessible at `http://localhost:8000/`.
 
 ### Create a New Game
 
-- **Endpoint:** `/game/new/`
+- **Endpoint:** `/game/new`
 - **HTTP Method:** POST
 
 Create a new Hangman game by sending a POST request to this endpoint. A random word will be selected from a predefined list, and the game will be initialized with the following default settings:
@@ -93,7 +93,7 @@ Retrieve the current state of a game by providing its `game_id` in the URL.
 
 Example Request:
 ```bash
-curl http://localhost:8000/game/1/
+curl http://localhost:8000/game/1
 ```
 
 Example Response:
