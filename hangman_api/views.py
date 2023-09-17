@@ -57,6 +57,17 @@ class GameStateView(generics.RetrieveAPIView):
     serializer_class = HangmanApiSerializer
     lookup_field = 'pk'
 
+    def retrieve(self, request, *args, **kwargs):
+        game = self.get_object()
+        remaining_incorrect_guesses = game.max_incorrect_guesses - game.incorrect_guesses
+
+        serializer = self.get_serializer(game)
+        data = serializer.data
+        data['remaining_incorrect_guesses'] = remaining_incorrect_guesses
+
+        return Response(data)
+
+
 class GuessView(generics.UpdateAPIView):
     queryset = HangmanApi.objects.all()
     serializer_class = HangmanApiSerializer

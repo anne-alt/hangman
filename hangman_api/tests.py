@@ -48,11 +48,13 @@ class GameStateAPITest(TestCase):
         self.assertEqual(data['current_word_state'], '___')
         self.assertEqual(data['incorrect_guesses'], 1)
         self.assertEqual(data['max_incorrect_guesses'], 2)
+        self.assertEqual(data['remaining_incorrect_guesses'], 1)  # Check remaining incorrect guesses
 
     def test_get_game_state_invalid_id(self):
         invalid_id = 999  # Non-existent game ID
         response = self.client.get(f'/game/{invalid_id}')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
 
 class GuessAPITest(TestCase):
     def setUp(self):
